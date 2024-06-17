@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('/layouts.public.home');
-})->name('home');
+})->name('home_public');
 
 Route::get('/admin', function () {
     return view('auth.login');
@@ -59,6 +59,13 @@ Route::middleware('auth')->group(function () {
         Route::put('edit/{id}', 'update')->name('products.update');
         Route::delete('destroy/{id}', 'destroy')->name('products.destroy');
     });
+
+    Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+    Route::get('home/create', [App\Http\Controllers\HomeController::class, 'create'])->name('home.create');
+    Route::post('home/create', [App\Http\Controllers\HomeController::class, 'store'])->name('home.store');
+    Route::get('home/{home}/edit', [App\Http\Controllers\HomeController::class, 'edit'])->name('home.edit');
+    Route::put('home/{home}/edit', [App\Http\Controllers\HomeController::class, 'update'])->name('home.update');
+    Route::delete('home/{home}/delete', [App\Http\Controllers\HomeController::class, 'destroy'])->name('home.destroy');
 
     Route::get('/profiles', [App\Http\Controllers\AuthController::class, 'profiles'])->name('profiles');
 });

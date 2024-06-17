@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -28,11 +28,11 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'local'),
 
     /*
     |--------------------------------------------------------------------------
-    | Application Debug Mode
+    | Application Debug Modea
     |--------------------------------------------------------------------------
     |
     | When your application is in debug mode, detailed error messages with
