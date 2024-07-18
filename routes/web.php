@@ -1,39 +1,23 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('/layouts.public.home');
-})->name('home_public');
-
-Route::get('/admin', function () {
-    return view('auth.login');
-});
-
-Route::get('/profiles', function () {
-    return view('view.profiles');
-});
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\FootersController;
+use App\Http\Controllers\ProfilesController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HomesController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FileController;
 
 
-Route::get('welcome', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+Route::get('/contact', [ContactUsController::class, 'index'])->name('contact')
+;
+Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
+Route::post('/contacts', [ContactsController::class, 'store'])->name('contacts.store');
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('register', 'register')->name('register');
@@ -46,34 +30,53 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('dashboard', function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::controller(ProductController::class)->prefix('products')->group(function () {
-        Route::get('', 'index')->name('products');
-        Route::get('create', 'create')->name('products.create');
-        Route::post('store', 'store')->name('products.store');
-        Route::get('show/{id}', 'show')->name('products.show');
-        Route::get('edit/{id}', 'edit')->name('products.edit');
-        Route::put('edit/{id}', 'update')->name('products.update');
-        Route::delete('destroy/{id}', 'destroy')->name('products.destroy');
-    });
+    Route::get('/homes', function () {
+        return view('homes');
+    })->name('homes');
 
-    Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
-    Route::get('home/create', [App\Http\Controllers\HomeController::class, 'create'])->name('home.create');
-    Route::post('home/create', [App\Http\Controllers\HomeController::class, 'store'])->name('home.store');
-    Route::get('home/{home}/edit', [App\Http\Controllers\HomeController::class, 'edit'])->name('home.edit');
-    Route::put('home/{home}/edit', [App\Http\Controllers\HomeController::class, 'update'])->name('home.update');
-    Route::delete('home/{home}/delete', [App\Http\Controllers\HomeController::class, 'destroy'])->name('home.destroy');
+    Route::get('/contactus', function () {
+        return view('contactus');
+    })->name('contactus');
 
-    Route::get('/profiles', [App\Http\Controllers\AuthController::class, 'profiles'])->name('profiles');
+    Route::get('/profiles', [App\Http\Controllers\FileController::class, 'index'])
+    ->name('files.index');
+
+    Route::get('/files/create', [App\Http\Controllers\FileController::class, 'create'])
+    ->name('files.create');
+
+    Route::post('/files/store', [App\Http\Controllers\FileController::class, 'store'])
+    ->name('files.store');
+
+
+    Route::get('/files/{file}/download', [App\Http\Controllers\FileController::class, 'download'])
+    ->name('profile.download');
+
+
+    Route::get('/profiles', [ProfilesController::class, 'index'])->name('profiles.index');
+    Route::get('/profiles/create', [ProfilesController::class, 'create'])->name('profiles.create');
+    Route::post('/profiles', [ProfilesController::class, 'store'])->name('profiles.store');
+    Route::get('/profiles/{profile}/edit', [ProfilesController::class, 'edit'])->name('profiles.edit');
+    Route::put('/profiles/{profile}', [ProfilesController::class, 'update'])->name('profiles.update');
+    Route::delete('/profiles/{profile}', [ProfilesController::class, 'destroy'])->name('profiles.destroy');
+
+
+    Route::get('/homes', [HomesController::class, 'index'])->name('homes.index');
+    Route::get('/homes/create', [HomesController::class, 'create'])->name('homes.create');
+    Route::post('/homes', [HomesController::class, 'store'])->name('homes.store');
+    Route::get('/homes/{home}/edit', [HomesController::class, 'edit'])->name('homes.edit');
+    Route::put('/homes/{home}', [HomesController::class, 'update'])->name('homes.update');
+    Route::delete('/homes/{home}', [HomesController::class, 'destroy'])->name('homes.destroy');
+
+    Route::get('/footers', [FootersController::class, 'index'])->name('footers.index');
+    Route::get('/footers/create', [FootersController::class, 'create'])->name('footers.create');
+    Route::post('/footers', [FootersController::class, 'store'])->name('footers.store');
+    Route::get('/footers/{id}/edit', [FootersController::class, 'edit'])->name('footers.edit');
+    Route::put('/footers/{id}', [FootersController::class, 'update'])->name('footers.update');
+    Route::delete('/footers/{id}', [FootersController::class, 'destroy'])->name('footers.destroy');
+
+
 });
-
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-
-Route::get('/project', [ProjectController::class, 'index'])->name('project');
-
-Route::get('/contact', [ContactController::class,'index'])->name('contact');
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

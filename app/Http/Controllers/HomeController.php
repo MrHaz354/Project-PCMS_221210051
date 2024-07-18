@@ -2,27 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Footers;
+use App\Models\Homes;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
-        return view('home');
+        $home = Homes::first();
+        $footers = Footers::first(); 
+        $data = [
+            'title' => 'home',
+            'home' => $home,
+            'footers' => $footers,
+        ];
+        return view('layouts.public.home', $data);
     }
+
 }
